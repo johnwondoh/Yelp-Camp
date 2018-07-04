@@ -93,11 +93,4 @@ router.delete("/:comment_id", middleware.checkCommentOwnership, function(req, re
     });
 });
 
-
-
-
-/********* Authorization middleware **********/
-// we implement a middle check checking the authority of a user, i.e., what he 
-// can and cannot do. Note that authorization is different from authentication.
-
 module.exports = router; 

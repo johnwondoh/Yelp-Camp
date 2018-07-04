@@ -16,27 +16,18 @@ var commentRoutes = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes     = require("./routes/index");
 
-// console.log(process.env.DATABASEURL); --- viewing the environment variable DATABASEURL for debugging purposes
-/***** locally hosted database ******/
-// using environment - specified in the console by --- export DATABASEURL=mongodb://localhost/yelp_camp 
-mongoose.connect(process.env.DATABASEURL);
-// previous local connection
-// mongoose.connect('mongodb://localhost/yelp_camp');
-/****** database hosted on MLAB ******/
-// mongoose.connect(' ');
 
-/****** Alternative Connection ******/
-// var url = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp'
-// mongoose.connect(url);
+
+
+/****** Database Connection ******/
+var url = process.env.DATABASEURL || 'mongodb://localhost/yelp_camp';
+mongoose.connect(url);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public")); 
-// seedDB();  /stop using seed database (seedDB) for the mean time -- probably finished serving its purpose
 
-// using method override for updates and deletes
 app.use(methodOverride("_method"));
-// using connect-flash for flash messages
 app.use(flash());
 
 /********PASSPORT Configuration*********/

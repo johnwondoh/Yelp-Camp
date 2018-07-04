@@ -5,20 +5,13 @@ var Campground  = require("../models/campgrounds");
 // adding middleware for checking loggin and authorization
 var middleware = require("../middleware/index"); 
 
-// Comment from app.js file --- The added parameter, e.g., /campground, when used here indicates  
-// that it can be removed from the refacted file, and only added here. That is, instead of writing
-// get('/campgrounds'), we'll write get('/')
-
 // INDEX route -- show all campgrounds
 router.get('/', function(req, res){
     Campground.find({}, function(err, allCampgrounds){
         if(err) {
-            console.log(err)
+            console.log(err);
         } else {
             res.render('campgrounds/index', {campgrounds:allCampgrounds});
-            // the req.user returns the current logged in user, or undefined if no user is logged in
-            // this inform is used in the header form to show whether a page should show login 
-            // and sign up, or just logout
         }
     });
 });
@@ -56,11 +49,7 @@ router.get('/new', middleware.isLoggedIn, function(req, res) { // requires users
 
 // SHOW route -- shows one thing, e.g., /dogs/:id -- shows info about one dog
 router.get('/:id', function(req, res) {
-    // find campground with provided ID
-    // Campground.findById(req.params.id, function(err, foundCampground){
     Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
-    // Campground.findById(req.params.id).populate('comments').exec(function(err, foundCampground){
-        // console.log('FOUND IT MAYIIN')
         if(err) {
             console.log(err);
         } else {
@@ -83,20 +72,8 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, function(req, res){
     });
 });
 
-// UPDATE campground route
-// router.put('/:id', function(req, res){
-//     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground){
-//         if(err){
-//             res.redirect('/campgrounds');
-//         } else {
-//              res.redirect('/campgrounds/'+req.params.id);
-//         }
-//     });
-// });
-
 // UPDATE CAMPGROUND ROUTE
 router.put("/:id", middleware.checkCampgroundOwnership, function(req, res){
-    // find and update the correct campground
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCampground){
        if(err){
            res.redirect("/campgrounds");
@@ -117,13 +94,6 @@ router.delete("/:id", middleware. checkCampgroundOwnership, function(req, res){
         }
     });
 });
-
-
-/********* Authorization middleware **********/
-// we implement a middle check checking the authority of a user, i.e., what he 
-// can and cannot do. Note that authorization is different from authentication.
-//------ moved to middleware/index--------------//
-
 
 //Exporting router
 module.exports = router;
